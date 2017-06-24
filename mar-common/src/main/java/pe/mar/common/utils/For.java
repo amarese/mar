@@ -8,27 +8,15 @@ import lombok.Getter;
 import lombok.ToString;
 
 public class For {
-	public interface Index {
-		int get();
-
-		int size();
-
-		boolean isFirst();
-
-		boolean isLast();
-
-		void stop();
-	}
-
 	@ToString
-	public static class IndexImpl implements Index {
+	public static class Index {
 		private boolean stop;
 
 		private int i = -1;
 
 		private final int size;
 
-		private IndexImpl(int size) {
+		private Index(int size) {
 			this.size = size;
 		}
 
@@ -38,22 +26,19 @@ public class For {
 		@Getter
 		private boolean last = false;
 
-		@Override
 		public int get() {
 			return i;
 		}
 
-		@Override
 		public int size() {
 			return size;
 		}
 
-		@Override
 		public void stop() {
 			stop = true;
 		}
 
-		private IndexImpl at() {
+		private Index at() {
 			i++;
 			this.first = i == 0;
 			this.last = i == size - 1;
@@ -62,12 +47,13 @@ public class For {
 		}
 	}
 
-	private IndexImpl index;
+	private Index index;
 
-	private For() {}
+	private For() {
+	}
 
 	private For(int size) {
-		index = new IndexImpl(size);
+		index = new Index(size);
 	}
 
 	public interface Consumer<U> {
@@ -120,7 +106,8 @@ public class For {
 		For f = new For(array.length);
 
 		for (U each : array) {
-			//			consumer.accept(f.index.at(i, i == 0, i == array.length - 1), each);
+			// consumer.accept(f.index.at(i, i == 0, i == array.length - 1),
+			// each);
 			if (!f.index.stop) {
 				consumer.accept(f.index.at(), each);
 			}
@@ -138,7 +125,8 @@ public class For {
 		}
 	}
 
-	public static <U1, U2> void each(Collection<U1> collection1, Collection<U2> collection2, MultipleConsumer<U1, U2> consumer) {
+	public static <U1, U2> void each(Collection<U1> collection1, Collection<U2> collection2,
+			MultipleConsumer<U1, U2> consumer) {
 		if (IsEmpty.collection(collection1)) {
 			return;
 		}
@@ -154,12 +142,14 @@ public class For {
 		}
 	}
 
-	public static <U1, U2, U3> void each(Collection<U1> collection1, Collection<U2> collection2, Collection<U3> collection3, TripleConsumer<U1, U2, U3> consumer) {
+	public static <U1, U2, U3> void each(Collection<U1> collection1, Collection<U2> collection2,
+			Collection<U3> collection3, TripleConsumer<U1, U2, U3> consumer) {
 		if (IsEmpty.collection(collection1)) {
 			return;
 		}
 
-		if (IsEmpty.collection(collection2) || IsEmpty.collection(collection3) || collection1.size() != collection2.size() || collection2.size() != collection3.size()) {
+		if (IsEmpty.collection(collection2) || IsEmpty.collection(collection3)
+				|| collection1.size() != collection2.size() || collection2.size() != collection3.size()) {
 			throw new IllegalArgumentException("All collections should have same size");
 		}
 
@@ -180,14 +170,14 @@ public class For {
 
 		Iterator<U> itr = collection.iterator();
 		while (itr.hasNext()) {
-			//			consumer.accept(f.index.at(i, i == 0, i == size - 1), itr.next());
 			if (!f.index.stop) {
 				consumer.accept(f.index.at(), itr.next());
 			}
 		}
 	}
 
-	public static <U1, U2> void each(Collection<U1> collection1, Collection<U2> collection2, IndexedMultipleConsumer<U1, U2> consumer) {
+	public static <U1, U2> void each(Collection<U1> collection1, Collection<U2> collection2,
+			IndexedMultipleConsumer<U1, U2> consumer) {
 		if (IsEmpty.collection(collection1)) {
 			return;
 		}
@@ -207,12 +197,14 @@ public class For {
 		}
 	}
 
-	public static <U1, U2, U3> void each(Collection<U1> collection1, Collection<U2> collection2, Collection<U3> collection3, IndexedTripleConsumer<U1, U2, U3> consumer) {
+	public static <U1, U2, U3> void each(Collection<U1> collection1, Collection<U2> collection2,
+			Collection<U3> collection3, IndexedTripleConsumer<U1, U2, U3> consumer) {
 		if (IsEmpty.collection(collection1)) {
 			return;
 		}
 
-		if (IsEmpty.collection(collection2) || IsEmpty.collection(collection3) || collection1.size() != collection2.size() || collection2.size() != collection3.size()) {
+		if (IsEmpty.collection(collection2) || IsEmpty.collection(collection3)
+				|| collection1.size() != collection2.size() || collection2.size() != collection3.size()) {
 			throw new IllegalArgumentException("All collections should have same size");
 		}
 

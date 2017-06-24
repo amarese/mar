@@ -1,20 +1,20 @@
 package pe.mar.common.utils;
 
-import static pe.mar.common.utils.StructUtils.*;
+import static pe.mar.common.utils.StructUtils.ifnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class Integers {
-	public static List<Long> toLongs(Collection<Integer> integers, boolean excludeNull) {
+	public static List<Long> toLongs(Collection<Integer> integers, boolean includeNull) {
 		if (integers == null) {
 			return null;
 		}
 
 		List<Long> longs = new ArrayList<>();
 		for (Integer each : integers) {
-			if (!excludeNull || each != null) {
+			if (includeNull || each != null) {
 				longs.add(each != null ? each.longValue() : null);
 			}
 		}
@@ -23,7 +23,7 @@ public class Integers {
 	}
 
 	public static List<Long> toLongs(Collection<Integer> integers) {
-		return toLongs(integers, false);
+		return toLongs(integers, true);
 	}
 
 	public static int sum(Collection<Integer> integers) {
