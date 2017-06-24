@@ -1,14 +1,19 @@
+.classpath
+.project
+.settings
+bin
+build
 .gradle
-/build/
-
-# Ignore Gradle GUI config
-gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
-
-# Cache of project
-.gradletasknamecache
-
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
+.externalToolBuilders
+.springBeans
+dist
+.idea
+*.iml
+*.ipr
+*.iws
+gradle/caches/
+gradle/daemon/
+gradle/wrapper/dists/
+gen-java
+local.properties
+classes

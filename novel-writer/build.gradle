@@ -1,0 +1,28 @@
+println "$project.name version : $project.version"
+
+apply plugin: 'org.springframework.boot'
+
+buildscript {
+	ext {
+		springBootVersion = '1.5.4.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+dependencies {
+	compile project(':mar-common')
+
+	compile "org.springframework:spring-beans:$spring"
+	compile "org.springframework:spring-context:$spring"
+	compile "org.springframework:spring-context-support:$spring"
+    
+	compile('org.springframework.boot:spring-boot-starter')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+

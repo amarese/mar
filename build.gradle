@@ -1,0 +1,60 @@
+allprojects {
+	group = "pe.mar"
+}
+
+def appPhase = getAppProperties().getProperty('app.phase', 'dev');
+println "app.phase = ${appPhase}"
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'maven'
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+	repositories {
+		mavenCentral()
+		mavenLocal()
+		jcenter()
+	}
+
+	ext {
+		logback = "1.2.3"
+		slf4j = "1.7.25"
+		spring = "4.3.2.RELEASE"
+		phase = appPhase
+	}
+
+	configurations.all {
+		exclude group: 'org.jboss.netty', module: 'netty'
+		exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+		exclude group: 'log4j', module: 'log4j'
+
+		resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+	}
+
+	eclipse {
+		classpath {
+			downloadSources = true
+		}
+	}
+	tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
+}
+
+task wrapper (type: Wrapper) {
+	gradleVersion = '3.0'
+}
+
+def getAppProperties() {
+	Properties properties
+	if (project.rootProject.file('local.properties').exists()) {
+		properties = new Properties()
+		properties.load(project.rootProject.file('local.properties').newDataInputStream())
+	} else {
+		properties = System.getProperties()
+	}
+
+	return properties;
+}
