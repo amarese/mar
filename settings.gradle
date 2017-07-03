@@ -1,3 +1,4 @@
 rootProject.name = 'mar'
 include 'mar-common'
-include 'novel-writer'
+include 'writer'
+include 'namer'

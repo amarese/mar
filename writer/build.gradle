@@ -17,12 +17,6 @@ buildscript {
 dependencies {
 	compile project(':mar-common')
 
-	compile "org.springframework:spring-beans:$spring"
-	compile "org.springframework:spring-context:$spring"
-	compile "org.springframework:spring-context-support:$spring"
-    
 	compile('org.springframework.boot:spring-boot-starter')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
-
-

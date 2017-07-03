@@ -1,12 +1,12 @@
-package pe.mar.novelwriter;
+package pe.mar.writer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NovelWriterApplication {
+public class WriterApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(NovelWriterApplication.class, args);
+		SpringApplication.run(WriterApplication.class, args);
 	}
 }

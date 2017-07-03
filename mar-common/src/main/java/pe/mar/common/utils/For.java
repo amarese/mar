@@ -106,8 +106,6 @@ public class For {
 		For f = new For(array.length);
 
 		for (U each : array) {
-			// consumer.accept(f.index.at(i, i == 0, i == array.length - 1),
-			// each);
 			if (!f.index.stop) {
 				consumer.accept(f.index.at(), each);
 			}
