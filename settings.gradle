@@ -1,4 +1,3 @@
-rootProject.name = 'mar'
 include 'mar-common'
 include 'writer'
 include 'namer'

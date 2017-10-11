@@ -1,9 +1,5 @@
 println "$project.name version : $project.version"
 
-ext {
-	group "pe.mar"
-}
-
 dependencies {
     compile "org.projectlombok:lombok:1.16.+"
 

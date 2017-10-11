@@ -1,10 +1,3 @@
-allprojects {
-	group = "pe.mar"
-}
-
-def appPhase = getAppProperties().getProperty('app.phase', 'dev');
-println "app.phase = ${appPhase}"
-
 subprojects {
 	apply plugin: 'java'
 	apply plugin: 'maven'
@@ -23,8 +16,6 @@ subprojects {
 	ext {
 		logback = "1.2.3"
 		slf4j = "1.7.25"
-		spring = "4.3.2.RELEASE"
-		phase = appPhase
 	}
 
 	configurations.all {
@@ -45,16 +36,4 @@ subprojects {
 
 task wrapper (type: Wrapper) {
 	gradleVersion = '3.0'
-}
-
-def getAppProperties() {
-	Properties properties
-	if (project.rootProject.file('local.properties').exists()) {
-		properties = new Properties()
-		properties.load(project.rootProject.file('local.properties').newDataInputStream())
-	} else {
-		properties = System.getProperties()
-	}
-
-	return properties;
 }

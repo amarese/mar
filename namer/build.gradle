@@ -1,24 +1,10 @@
 println "$project.name version : $project.version"
 
-apply plugin: 'org.springframework.boot'
-
-buildscript {
-	ext {
-		springBootVersion = '1.5.4.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
-}
-
 dependencies {
 	compile project(':mar-common')
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 	compile "javax.inject:javax.inject:1"
 
-	compile('org.springframework.boot:spring-boot-starter')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile('org.springframework.boot:spring-boot-starter:1.5.4.RELEASE')
+	testCompile('org.springframework.boot:spring-boot-starter-test:1.5.4.RELEASE')
 }
