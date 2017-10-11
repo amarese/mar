@@ -1,0 +1,6 @@
+println "$project.name version : $project.version"
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web:1.5.7.RELEASE')
+	testCompile('org.springframework.boot:spring-boot-starter-test:1.5.7.RELEASE')
+}
