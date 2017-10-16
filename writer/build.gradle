@@ -1,5 +1,21 @@
 println "$project.name version : $project.version"
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE")
+    }
+}
+
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = 'writer'
+    version =  version
+}
+
 dependencies {
 	compile project(':mar-common')
 	compile "javax.inject:javax.inject:1"
