@@ -7,7 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WriterApplication  implements CommandLineRunner{
+public class WriterApplication implements CommandLineRunner {
 	@Inject
 	private NaverNewsCollector naverNewsCollector;
 
@@ -15,7 +15,7 @@ public class WriterApplication  implements CommandLineRunner{
 	public void run(String... args) {
 		this.naverNewsCollector.execute();
 	}
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(WriterApplication.class, args);
 	}
