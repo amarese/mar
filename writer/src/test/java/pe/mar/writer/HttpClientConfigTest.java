@@ -14,18 +14,16 @@ import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Import(WriterApplication.class)
 public class HttpClientConfigTest {
 	@Inject
 	CloseableHttpClient httpClient;
 
 	@Test
-	public void test() throws ClientProtocolException, IOException {
+	public void execute() throws ClientProtocolException, IOException {
 		String target = "http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=104";
 		HttpGet httpGet = new HttpGet(target);
 		CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
@@ -36,5 +34,5 @@ public class HttpClientConfigTest {
 		}
 
 	}
-	
+
 }

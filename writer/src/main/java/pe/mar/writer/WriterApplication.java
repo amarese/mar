@@ -13,7 +13,7 @@ public class WriterApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
-		this.naverNewsCollector.execute();
+		this.naverNewsCollector.execute(true);
 	}
 
 	public static void main(String[] args) {

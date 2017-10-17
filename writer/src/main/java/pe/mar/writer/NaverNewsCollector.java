@@ -46,7 +46,7 @@ public class NaverNewsCollector {
 
 	}
 
-	private String decorate(String cutString) {
+	String decorate(String cutString) {
 		String replacedString = cutString
 				.replace("class=\"compo_headtxt\"",
 						"style=\"margin: 0px 0px 7px; padding: 0px; font-size: 14px; line-height: 21px; color: #2f57aa;\"")
@@ -93,7 +93,7 @@ public class NaverNewsCollector {
 		// log.info(title + "\n\n\n\n\n\n" + news);
 	}
 
-	public void execute() {
+	public void execute(boolean publish) {
 		try {
 			String news = collect();
 			if (IsEmpty.string(news)) {
@@ -101,7 +101,11 @@ public class NaverNewsCollector {
 				return;
 			}
 			String body = splitBody(news);
-			publish(title(body), decorate(body));
+			if (publish) {
+				publish(title(body), decorate(body));
+			} else {
+				log.info("title : {}, body : {}", title(body), decorate(body));
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
