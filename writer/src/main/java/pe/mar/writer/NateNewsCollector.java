@@ -1,5 +1,8 @@
 package pe.mar.writer;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +16,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import pe.mar.common.utils.IsEmpty;
 
@@ -37,18 +44,29 @@ public class NateNewsCollector {
 		return null;
 	}
 
-	String splitBody(String news) {
+	List<News> splitBody(String news) {
 		Pattern pattern = Pattern.compile(
-				"<div class=\"mduCluster\">([ \\s]*<h4>.+?</h4>.*?<ul class=\"mduList1\">.+?</ul>[ \\s]*</div>)", Pattern.DOTALL);
+				"<div class=\"mduCluster\">([ \\s]*<h4[^>]*>(.+?)</h4>.*?<ul class=\"mduList1\">.+?</ul>[ \\s]*</div>)",
+				Pattern.DOTALL);
 		Matcher matcher = pattern.matcher(news);
-		if (matcher.find()) {
+		List<News> result = Lists.newArrayList();
+		while (matcher.find()) {
 			String cutString = matcher.group(1);
-			return cutString.trim();
+			String title = matcher.group(2);
+			result.add(new News(title.trim(), cutString.trim()));
 		}
-		return null;
+		return result;
 	}
 
-	String decorate(String cutString) {
+	String decorateTitle(String title) {
+		if ("세계 주요 뉴스".equals(title)) {
+			String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+			return date + " " + title;
+		}
+		return title;
+	}
+
+	String decorateBody(String cutString) {
 		String replacedString = cutString
 				.replace("<h4",
 						"<h4 style=\"margin: 0px; padding: 0px 0px 15px; font-stretch: normal; font-size: 12pt; line-height: normal; font-family: Dotum, Helvetica, sans-serif; color: #2d589e; letter-spacing: -1px;\"")
@@ -76,7 +94,7 @@ public class NateNewsCollector {
 	}
 
 	String title(String cutString) {
-		Pattern pattern = Pattern.compile("<h4[^>]*>(.+)</h4>");
+		Pattern pattern = Pattern.compile("<h4[^>]*>(.+?)</h4>");
 		Matcher matcher = pattern.matcher(cutString);
 		if (matcher.find()) {
 			String title = matcher.group(1).replaceAll("<[^>]+>", "");
@@ -95,19 +113,28 @@ public class NateNewsCollector {
 
 	public void execute(boolean publish) {
 		try {
-			String news = collect();
-			if (IsEmpty.string(news)) {
+			String html = collect();
+			if (IsEmpty.string(html)) {
 				log.error("empty result");
 				return;
 			}
-			String body = splitBody(news);
-			if (publish) {
-				publish(title(body), decorate(body));
-			} else {
-				log.info("title : {}, body : {}", title(body), decorate(body));
+			List<News> list = splitBody(html);
+			for (News news : list) {
+				if (publish) {
+					publish(decorateTitle(news.getTitle()), decorateBody(news.getBody()));
+				} else {
+					log.info("title : {}, body : {}", decorateTitle(news.getTitle()), decorateBody(news.getBody()));
+				}
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
+	}
+
+	@Data
+	@AllArgsConstructor
+	public class News {
+		String title;
+		String body;
 	}
 }
