@@ -13,6 +13,8 @@ public class WriterApplication implements ApplicationRunner {
 	private NaverNewsCollector naverNewsCollector;
 	@Inject
 	private NateNewsCollector nateNewsCollector;
+	@Inject
+	private DaumNewsCollector daumNewsCollector;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -22,6 +24,9 @@ public class WriterApplication implements ApplicationRunner {
 			}
 			if ("nate".equals(name)) {
 				this.nateNewsCollector.execute(true);
+			}
+			if ("daum".equals(name)) {
+				this.daumNewsCollector.execute(true);
 			}
 		}
 	}
