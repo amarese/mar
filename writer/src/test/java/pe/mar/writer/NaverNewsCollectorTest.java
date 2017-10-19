@@ -24,16 +24,6 @@ public class NaverNewsCollectorTest {
 	}
 
 	@Test
-	public void title() throws Exception {
-		String expected = "'北 도발' 美 입장·대응";
-		String actual = collector
-				.title("\n<h5 class=\"compo_headtxt\"><a href=\"http://news.naver.com/main/hotissue/sectionList.nhn?mid=hot&sid1=100&cid=1049580\" class=\"compo_linkhead\">"
-						+ expected
-						+ "</a><a href=\"http://news.naver.com/main/hotissue/sectionList.nhn?mid=hot&sid1=100&cid=1049580\" class=\"compo_more\">더보기</a></h5>\n어쩌구");
-		assertEquals(expected, actual);
-	}
-
-	@Test
 	public void execute() throws Exception {
 		collector.execute(false);
 	}
