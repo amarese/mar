@@ -1,5 +1,6 @@
 package pe.mar.writer;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +14,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import pe.mar.common.utils.IsEmpty;
 
@@ -37,16 +42,25 @@ public class NaverNewsCollector {
 		return null;
 	}
 
-	public String splitBody(String news) throws Exception {
-		String beginStr = "<div class=\"section_headline headline_subordi\">";
-		int start = news.indexOf(beginStr);
-		int end = start + news.substring(start).indexOf("</div>");
-		String cutString = news.substring(start + beginStr.length(), end);
-		return cutString;
-
+	List<News> splitBody(String news) {
+		Pattern pattern = Pattern.compile(
+				"<div class=\"section_headline headline_subordi\">([ \\s]*<h5[^>]*><a[^>]*>(.+?)</a>.*?</h5>.*?<ul class=\"slist1\">.+?</ul>[ \\s]*)</div>",
+				Pattern.DOTALL);
+		Matcher matcher = pattern.matcher(news);
+		List<News> result = Lists.newArrayList();
+		while (matcher.find()) {
+			String cutString = matcher.group(1);
+			String title = matcher.group(2);
+			result.add(new News(title.trim(), cutString.trim()));
+		}
+		return result;
 	}
 
-	String decorate(String cutString) {
+	String decorateTitle(String title) {
+		return title;
+	}
+
+	String decorateBody(String cutString) {
 		String replacedString = cutString
 				.replace("class=\"compo_headtxt\"",
 						"style=\"margin: 0px 0px 7px; padding: 0px; font-size: 14px; line-height: 21px; color: #2f57aa;\"")
@@ -95,19 +109,28 @@ public class NaverNewsCollector {
 
 	public void execute(boolean publish) {
 		try {
-			String news = collect();
-			if (IsEmpty.string(news)) {
+			String html = collect();
+			if (IsEmpty.string(html)) {
 				log.error("empty result");
 				return;
 			}
-			String body = splitBody(news);
-			if (publish) {
-				publish(title(body), decorate(body));
-			} else {
-				log.info("title : {}, body : {}", title(body), decorate(body));
+			List<News> list = splitBody(html);
+			for (News news : list) {
+				if (publish) {
+					publish(decorateTitle(news.getTitle()), decorateBody(news.getBody()));
+				} else {
+					log.info("title : {}, body : {}", decorateTitle(news.getTitle()), decorateBody(news.getBody()));
+				}
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
+	}
+
+	@Data
+	@AllArgsConstructor
+	public class News {
+		String title;
+		String body;
 	}
 }
