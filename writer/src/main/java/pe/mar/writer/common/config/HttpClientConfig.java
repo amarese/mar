@@ -1,4 +1,4 @@
-package pe.mar.writer;
+package pe.mar.writer.common.config;
 
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.CloseableHttpClient;

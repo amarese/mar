@@ -1,4 +1,4 @@
-package pe.mar.writer;
+package pe.mar.writer.news.collector;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

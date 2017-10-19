@@ -1,4 +1,4 @@
-package pe.mar.writer;
+package pe.mar.writer.news.publisher;
 
 import javax.inject.Inject;
 
@@ -11,13 +11,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Ignore
-public class XmlRpcBlogWriterTest {
+public class MetaWeblogClientTest {
 	@Inject
-	XmlRpcBlogWriter writer;
+	MetaWeblogClient writer;
 
 	@Test
 	public void write() throws Exception {
-		String rs = writer.write("소식", "20171015", "IS의 상징적 수도 락까 함락 임박");
+		String rs = writer.publish("소식", "20171015", "IS의 상징적 수도 락까 함락 임박");
 		System.out.println(rs);
 	}
 

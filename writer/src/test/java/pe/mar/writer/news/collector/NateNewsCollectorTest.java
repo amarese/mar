@@ -1,4 +1,4 @@
-package pe.mar.writer;
+package pe.mar.writer.news.collector;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +11,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import pe.mar.writer.NewsCollectorBase.News;
+import pe.mar.writer.news.collector.NateNewsCollector;
+import pe.mar.writer.news.collector.NewsCollectorBase.News;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

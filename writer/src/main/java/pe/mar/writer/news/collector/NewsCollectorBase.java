@@ -1,4 +1,4 @@
-package pe.mar.writer;
+package pe.mar.writer.news.collector;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import pe.mar.common.utils.IsEmpty;
+import pe.mar.writer.news.publisher.MetaWeblogClient;
 
 @Service
 @Slf4j
@@ -23,7 +24,7 @@ public abstract class NewsCollectorBase {
 	@Inject
 	CloseableHttpClient httpClient;
 	@Inject
-	XmlRpcBlogWriter blogWriter;
+	MetaWeblogClient blogWriter;
 
 	abstract String getUrl();
 
@@ -45,7 +46,7 @@ public abstract class NewsCollectorBase {
 	abstract String decorateBody(String cutString);
 
 	public void publish(String title, String news) throws Exception {
-		String rs = blogWriter.write("소식", title, news);
+		String rs = blogWriter.publish("소식", title, news);
 		log.info("publish result : {}", rs);
 	}
 

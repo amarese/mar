@@ -1,4 +1,4 @@
-package pe.mar.writer;
+package pe.mar.writer.news.collector;
 
 import java.util.List;
 import java.util.regex.Matcher;

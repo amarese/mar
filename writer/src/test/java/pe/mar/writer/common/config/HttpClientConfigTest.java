@@ -1,4 +1,4 @@
-package pe.mar.writer;
+package pe.mar.writer.common.config;
 
 import java.io.IOException;
 
