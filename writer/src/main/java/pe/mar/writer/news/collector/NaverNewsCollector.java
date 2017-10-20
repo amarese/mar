@@ -58,7 +58,7 @@ public class NaverNewsCollector extends NewsCollectorBase {
 						"<li style=\"margin: 0px; padding: 0px 0px 5px 11px; list-style: none; line-height: 14px; background: url('http://static.news.naver.net/image/news/2009/ico_list_sub2.gif') 0px 2px no-repeat;\">")
 				.replace("<dt>",
 						"<dt style=\"margin: 0px; padding: 3px 0px 0px; height: 21px; font-size: 18px; font-weight: bold; letter-spacing: -1px;\">")
-				.replaceAll("onError=\".+\"", "");
+				.replaceAll("onError=\".+?\"", "");
 		return replacedString;
 	}
 }

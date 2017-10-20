@@ -62,7 +62,7 @@ public class NateNewsCollector extends NewsCollectorBase {
 				.replace("<li>",
 						"<li style=\"margin: 0px; padding: 0px 0px 5px 11px; list-style: none; line-height: 14px; background: url('http://static.news.naver.net/image/news/2009/ico_list_sub2.gif') 0px 2px no-repeat;\">")
 				.replace("<img ", "<img style=\"border: 1px solid #e8e8e8; display: block;\" ")
-				.replaceAll("onclick=\".+\"", "").replaceAll("onerror=\".+\"", "");
+				.replaceAll("onclick=\".+?\"", "").replaceAll("onerror=\".+?\"", "");
 		return replacedString;
 	}
 }
