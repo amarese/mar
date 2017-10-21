@@ -30,6 +30,7 @@ public abstract class NewsCollectorBase {
 
 	public String collect(String url) throws Exception {
 		HttpGet httpGet = new HttpGet(url);
+		httpGet.addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36");
 		CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
 		HttpEntity httpEntity = httpResponse.getEntity();
 		if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
