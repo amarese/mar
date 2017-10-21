@@ -17,7 +17,7 @@ public class DaumNewsCollector extends NewsCollectorBase {
 
 	List<News> splitBody(String news) {
 		Pattern pattern = Pattern.compile(
-				"<li >(.+?<a href=\"/issue/[0-9]+\"[^>]*>(.+?)</a>.*?<div class=\"relate_news\">.+?</div>[ \\s]*)</li>",
+				"<a href=\"/issue/\" class=\"link_txt\">이슈</a>(.+?<a href=\"/issue/[0-9]+\"[^>]*>(.+?)</a>.*?<div class=\"relate_news\">.+?</div>[ \\s]*)</li>",
 				Pattern.DOTALL);
 		Matcher matcher = pattern.matcher(news);
 		List<News> result = Lists.newArrayList();
