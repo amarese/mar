@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import pe.mar.writer.news.collector.BingNewsCollector;
 import pe.mar.writer.news.collector.DaumNewsCollector;
 import pe.mar.writer.news.collector.MsnNewsCollector;
 import pe.mar.writer.news.collector.NateNewsCollector;
@@ -22,6 +23,8 @@ public class GlobalNewsExecuter {
 	private ZumNewsCollector zumNewsCollector;
 	@Inject
 	private MsnNewsCollector msnNewsCollector;
+	@Inject
+	private BingNewsCollector bingNewsCollector;
 
 	public void execute(String source) {
 		if ("naver".equals(source)) {
@@ -38,6 +41,9 @@ public class GlobalNewsExecuter {
 		}
 		if ("msn".equals(source)) {
 			this.msnNewsCollector.execute(true);
+		}
+		if ("bing".equals(source)) {
+			this.bingNewsCollector.execute(true);
 		}
 	}
 }
