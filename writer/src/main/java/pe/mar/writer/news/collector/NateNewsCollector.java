@@ -39,7 +39,8 @@ public class NateNewsCollector extends NewsCollectorBase {
 		return title;
 	}
 
-	String decorateBody(String cutString) {
+	String decorateBody(News news) {
+		String cutString = news.getBody();
 		String replacedString = cutString
 				.replace("<h4",
 						"<h4 style=\"margin: 0px; padding: 0px 0px 15px; font-stretch: normal; font-size: 12pt; line-height: normal; font-family: Dotum, Helvetica, sans-serif; color: #2d589e; letter-spacing: -1px;\"")

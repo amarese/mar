@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import pe.mar.common.utils.IsEmpty;
 import pe.mar.writer.news.publisher.MetaWeblogClient;
@@ -30,7 +32,8 @@ public abstract class NewsCollectorBase {
 
 	public String collect(String url) throws Exception {
 		HttpGet httpGet = new HttpGet(url);
-		httpGet.addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36");
+		httpGet.addHeader("user-agent",
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36");
 		CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
 		HttpEntity httpEntity = httpResponse.getEntity();
 		if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -44,7 +47,7 @@ public abstract class NewsCollectorBase {
 
 	abstract String decorateTitle(String title);
 
-	abstract String decorateBody(String cutString);
+	abstract String decorateBody(News news);
 
 	public void publish(String title, String news) throws Exception {
 		String rs = blogWriter.publish("소식", title, news);
@@ -61,9 +64,9 @@ public abstract class NewsCollectorBase {
 			List<News> list = splitBody(html);
 			for (News news : list) {
 				if (publish) {
-					publish(decorateTitle(news.getTitle()), decorateBody(news.getBody()));
+					publish(decorateTitle(news.getTitle()), decorateBody(news));
 				} else {
-					log.info("title : {}, body : {}", decorateTitle(news.getTitle()), decorateBody(news.getBody()));
+					log.info("title : {}, body : {}", decorateTitle(news.getTitle()), decorateBody(news));
 				}
 			}
 		} catch (Exception e) {
@@ -72,9 +75,24 @@ public abstract class NewsCollectorBase {
 	}
 
 	@Data
-	@AllArgsConstructor
+	@RequiredArgsConstructor
 	public class News {
+		@NonNull
 		String title;
+		@NonNull
 		String body;
+		String link;
+		Article mainArticle;
+		List<Article> subArticles;
+	}
+
+	@Data
+	@AllArgsConstructor
+	public class Article {
+		String medium;
+		String title;
+		String content;
+		String link;
+		String image;
 	}
 }

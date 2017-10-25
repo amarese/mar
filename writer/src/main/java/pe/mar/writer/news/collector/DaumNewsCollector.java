@@ -33,16 +33,15 @@ public class DaumNewsCollector extends NewsCollectorBase {
 		return title;
 	}
 
-	String decorateBody(String cutString) {
+	String decorateBody(News news) {
+		String cutString = news.getBody();
 		String replacedString = cutString
 				.replace("class=\"emph_g\"",
 						"style=\"font-weight: bold; color: #396dbb; display: block; padding: 3px 0px 4px; font-size: 14px; line-height: 20px; letter-spacing: -0.7px;\"")
-				.replace("class=\"link_txt\"",
-						"style=\"color: #396dbb; text-decoration-line: none;\"")
+				.replace("class=\"link_txt\"", "style=\"color: #396dbb; text-decoration-line: none;\"")
 				.replace("class=\"link_thumb\"",
 						"style=\"color: #333333; text-decoration-line: none; display: block; position: relative; float: right; margin-top: 8px; font-size: 14px; letter-spacing: -0.7px;\"")
-				.replace("class=\"thumb_g\"",
-						"style=\"border: 0px none; vertical-align: top;\"")
+				.replace("class=\"thumb_g\"", "style=\"border: 0px none; vertical-align: top;\"")
 				.replace("class=\"cont_thumb\"",
 						"style=\"margin: 0px; padding: 0px 40px 0px 0px; overflow: hidden; color: #333333; font-size: 14px; letter-spacing: -0.7px;\"")
 				.replace("class=\"tit_thumb\"",
@@ -52,8 +51,7 @@ public class DaumNewsCollector extends NewsCollectorBase {
 				.replace("class=\"screen_out\"",
 						"style=\"margin: 0px; padding: 0px; overflow: hidden; position: absolute; width: 0px; height: 0px; line-height: 0; text-indent: -9999px;\"")
 				.replace("class=\"item_relate\"",
-						"style=\"margin: 0px; padding: 0px; height: 22px; font-size: 16px; line-height: 22px;\"")
-				;
+						"style=\"margin: 0px; padding: 0px; height: 22px; font-size: 16px; line-height: 22px;\"");
 		return replacedString;
 	}
 }

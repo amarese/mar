@@ -15,16 +15,59 @@ public class NaverNewsCollector extends NewsCollectorBase {
 	@Getter
 	String url = "http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=104";
 
-	List<News> splitBody(String news) {
+	List<News> splitBody(String html) {
 		Pattern pattern = Pattern.compile(
-				"<div class=\"section_headline headline_subordi\">([ \\s]*<h5[^>]*><a[^>]*>(.+?)</a>.*?</h5>.*?<ul class=\"slist1\">.+?</ul>[ \\s]*)</div>",
+				"<div class=\"section_headline headline_subordi\">([ \\s]*<h5[^>]*><a href=\"(.+?)\"[^>]*>(.+?)</a>.*?</h5>.*?<ul class=\"slist1\">.+?</ul>[ \\s]*)</div>",
 				Pattern.DOTALL);
-		Matcher matcher = pattern.matcher(news);
+		Matcher matcher = pattern.matcher(html);
 		List<News> result = Lists.newArrayList();
 		while (matcher.find()) {
 			String cutString = matcher.group(1);
+			String link = matcher.group(2);
+			String title = matcher.group(3);
+			News news = new News(title.trim(), cutString.trim());
+			news.setLink(link);
+
+			Article mainArticle = mainArticle(cutString);
+			news.setMainArticle(mainArticle);
+			List<Article> subArticles = subArticles(cutString);
+			news.setSubArticles(subArticles);
+			result.add(news);
+		}
+		return result;
+	}
+
+	Article mainArticle(String cutString) {
+		Pattern pattern = Pattern.compile(
+				"<dt class=\"photo\">.+?<img src=\"(.+?)\".+?<dt>[\\s]*<a.+?href=\"(.+?)\" >[\\s]*(.+?)</a>.+?<dd.+?>(.+?)<span class=\"writing\">(.+?)</span>",
+				Pattern.DOTALL);
+		Matcher matcher = pattern.matcher(cutString);
+		if (matcher.find()) {
+			String image = matcher.group(1);
+			String link = matcher.group(2);
+			String title = matcher.group(3);
+			String content = matcher.group(4);
+			String medium = matcher.group(5);
+
+			Article mainArticle = new Article(medium, title, content, link, image);
+			return mainArticle;
+		}
+		return null;
+	}
+
+	List<Article> subArticles(String cutString) {
+		Pattern pattern = Pattern.compile(
+				"<li>.+?<a.+?href=\"(.+?)\".+?>(.+?)</a>.+?<span class=\"writing\">(.+?)</span>.+?</li>",
+				Pattern.DOTALL);
+		Matcher matcher = pattern.matcher(cutString);
+		List<Article> result = Lists.newArrayList();
+		while (matcher.find()) {
+			String link = matcher.group(1);
 			String title = matcher.group(2);
-			result.add(new News(title.trim(), cutString.trim()));
+			String medium = matcher.group(3);
+
+			Article article = new Article(medium, title, null, link, null);
+			result.add(article);
 		}
 		return result;
 	}
@@ -33,32 +76,21 @@ public class NaverNewsCollector extends NewsCollectorBase {
 		return title;
 	}
 
-	String decorateBody(String cutString) {
-		String replacedString = cutString
-				.replace("class=\"compo_headtxt\"",
-						"style=\"margin: 0px 0px 7px; padding: 0px; font-size: 14px; line-height: 21px; color: #2f57aa;\"")
-				.replace("class=\"compo_linkhead\"",
-						"style=\"color: #2f57aa; text-decoration-line: none; display: inline-block; vertical-align: middle;\"")
-				.replace("class=\"compo_more\"",
-						"style=\"color: #d63f18; text-decoration-line: none; display: inline-block; margin: 0px 0px -2px 7px; font-size: 11px; font-weight: normal; letter-spacing: -1px; vertical-align: middle;\"")
-				.replace("class=\"photo\"",
-						"style=\"margin: 1px 14px 0px 0px; padding: 0px; height: auto; font-size: 18px; font-weight: bold; letter-spacing: -1px; position: relative; float: left; display: inline-block;\"")
-				.replace("class=\"sphoto1\"",
-						"style=\"margin: 0px; padding: 0px; clear: both; float: left; width: 573px; color: #2f2f2f; font-size: 12px;\"")
-				.replace("class=\"slist1\"",
-						"style=\"margin: 0px; padding: 6px 0px 0px; clear: both; color: #2f2f2f; font-size: 12px;\"")
-				.replace("class=\"writing\"",
-						"style=\"display: inline-block; margin: 0px 0px 0px 10px; font-size: 11px; color: #c64c4c; letter-spacing: -1px; line-height: 17px;\"")
-				.replace("class=\"r_ico r_vod_small\"",
-						"style=\"background-image: url('http://static.news.naver.net/image/news/2017/09/13/sp_news.png'); background-size: 354px 328px; display: block; position: absolute; font-size: 0px; line-height: 0; vertical-align: middle; width: 26px; height: 26px; background-position: -160px -88px; left: 4px; bottom: 4px;\"")
-				.replace("<dt><a",
-						"<dt><a style=\"color: #6e4987; text-decoration-line: none; display: inline-block; width: 399px; height: 21px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;\"")
-				.replace("<li><a", "<li><a style=\"color: #6e4987; text-decoration-line: none; margin-right: 4px;\"")
-				.replace("<li>",
-						"<li style=\"margin: 0px; padding: 0px 0px 5px 11px; list-style: none; line-height: 14px; background: url('http://static.news.naver.net/image/news/2009/ico_list_sub2.gif') 0px 2px no-repeat;\">")
-				.replace("<dt>",
-						"<dt style=\"margin: 0px; padding: 3px 0px 0px; height: 21px; font-size: 18px; font-weight: bold; letter-spacing: -1px;\">")
-				.replaceAll("onError=\".+?\"", "");
-		return replacedString;
+	String decorateBody(News news) {
+		String title = String.format("<h3>%s</h3>", news.getTitle());
+		String intro = String.format("현재 국제사회에서 \"<a href=\"%s\">%s</a>\" 이슈가 화제입니다.<br>", news.getLink(),
+				news.getTitle());
+		Article mainArticle = news.getMainArticle();
+		String main = String.format(
+				"최근 %s 에서는  \"<a href=\"%s\">%s</a>\" 의 제목으로 아래와 같은 보도를 전했습니다.<div><a href=\"%s\"><img src=\"%s\" align=\"left\"></a>%s</div>",
+				mainArticle.getMedium(), mainArticle.getLink(), mainArticle.getTitle(), mainArticle.getLink(),
+				mainArticle.getImage(), mainArticle.getContent());
+		String sub = "<br><br>그 외에도 각종 언론사들은 다음과 같은 보도를 이어나갔습니다.<br><br>";
+		for (Article article : news.getSubArticles()) {
+			sub += String.format("<a href=\"%s\">%s</a> - %s<br>\n", article.getLink(), article.getTitle(),
+					article.getMedium());
+		}
+		String result = String.format("%s\n%s\n%s\n%s", title, intro, main, sub);
+		return result;
 	}
 }

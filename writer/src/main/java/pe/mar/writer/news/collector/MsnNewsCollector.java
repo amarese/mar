@@ -36,11 +36,11 @@ public class MsnNewsCollector extends NewsCollectorBase {
 		return date + " " + title;
 	}
 
-	String decorateBody(String cutString) {
+	String decorateBody(News news) {
+		String cutString = news.getBody();
 		String replacedString = cutString.replace("<a href=\"/", "<a href=\"https://www.msn.com/")
 				.replaceAll(" src=\".+?\"", " ").replaceAll(" data-src=\".+?(//.+?)&quot;}\"", " src=\"$1\"")
-				.replaceAll("&amp;", "&")
-				.replaceAll("(?s)<li  class=\"showcasead\">.+?</li>", "");
+				.replaceAll("&amp;", "&").replaceAll("(?s)<li  class=\"showcasead\">.+?</li>", "");
 		return replacedString;
 	}
 }

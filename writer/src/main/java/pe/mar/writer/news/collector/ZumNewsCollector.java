@@ -33,7 +33,8 @@ public class ZumNewsCollector extends NewsCollectorBase {
 		return title;
 	}
 
-	String decorateBody(String cutString) {
+	String decorateBody(News news) {
+		String cutString = news.getBody();
 		String replacedString = cutString.replace("<a href=\"/", "<a href=\"http://news.zum.com/");
 		return replacedString;
 	}
