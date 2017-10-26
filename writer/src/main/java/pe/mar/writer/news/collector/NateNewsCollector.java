@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 import lombok.Getter;
-import pe.mar.common.utils.IsNotEmpty;
 
 @Service
 public class NateNewsCollector extends NewsCollectorBase {
@@ -84,38 +83,5 @@ public class NateNewsCollector extends NewsCollectorBase {
 			return date + " " + title;
 		}
 		return title;
-	}
-
-	String decorateBody(News news) {
-		String title = String.format("<h3>%s</h3>", news.getTitle());
-		String intro = "";
-		if ("세계 주요 뉴스".equals(news.getTitle()) || "지구촌 뉴스".equals(news.getTitle())) {
-			String date = new SimpleDateFormat("yyyy년 MM월 dd일").format(new Date());
-			intro = IsNotEmpty.string(news.getLink())
-					? String.format("%s, \"<a href=\"%s\">%s</a>\" 입니다.<br>", date, news.getLink(), news.getTitle())
-					: String.format("%s, \"%s\" 입니다.<br>", date, news.getTitle());
-		} else {
-			intro = IsNotEmpty.string(news.getLink()) ? String
-					.format("최근 국제 정가에서는 \"<a href=\"%s\">%s</a>\" 관련 이슈가 화제다.<br>", news.getLink(), news.getTitle())
-					: String.format("최근 국제 정가에서는 \"%s\" 관련 이슈가 화제다.<br>", news.getTitle());
-		}
-		Article mainArticle = news.getMainArticle();
-
-		String image = IsNotEmpty.string(mainArticle.getImage())
-				? String.format("<a href=\"%s\"><img src=\"%s\" align=\"left\"></a>", mainArticle.getLink(),
-						mainArticle.getImage())
-				: "";
-
-		String main = String.format("<p>최근 %s 에서는  \"<a href=\"%s\">%s</a>\" 의 제목으로 아래와 같은 보도를 전했다.</p>" + "%s" + "%s",
-				mainArticle.getMedium(), mainArticle.getLink(), mainArticle.getTitle(), image,
-				mainArticle.getContent());
-
-		String sub = "<br><br>그 외에도 각종 언론사들은 다음과 같은 보도를 이어나갔다.<br><br>";
-		for (Article article : news.getSubArticles()) {
-			sub += String.format("<a href=\"%s\">%s</a> - %s<br>\n", article.getLink(), article.getTitle(),
-					article.getMedium());
-		}
-		String result = String.format("%s\n%s\n%s\n%s", title, intro, main, sub);
-		return result;
 	}
 }

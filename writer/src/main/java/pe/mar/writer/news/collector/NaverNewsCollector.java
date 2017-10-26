@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 import lombok.Getter;
-import pe.mar.common.utils.IsNotEmpty;
 
 @Service
 public class NaverNewsCollector extends NewsCollectorBase {
@@ -80,30 +79,5 @@ public class NaverNewsCollector extends NewsCollectorBase {
 
 	String decorateTitle(String title) {
 		return title;
-	}
-
-	String decorateBody(News news) {
-		String title = String.format("<h3>%s</h3>", news.getTitle());
-		String intro = String.format("현재 국제사회에서 \"<a href=\"%s\">%s</a>\" 이슈가 화제입니다.<br>", news.getLink(),
-				news.getTitle());
-		Article mainArticle = news.getMainArticle();
-
-		String image = IsNotEmpty.string(mainArticle.getImage())
-				? String.format("<a href=\"%s\"><img src=\"%s\" align=\"left\"></a>", mainArticle.getLink(),
-						mainArticle.getImage())
-				: "";
-
-		String main = String.format(
-				"<p>최근 %s 에서는  \"<a href=\"%s\">%s</a>\" 의 제목으로 아래와 같은 보도를 전했습니다.</p>" + "%s" + "%s",
-				mainArticle.getMedium(), mainArticle.getLink(), mainArticle.getTitle(), image,
-				mainArticle.getContent());
-
-		String sub = "<br><br>그 외에도 각종 언론사들은 다음과 같은 보도를 이어나갔습니다.<br><br>";
-		for (Article article : news.getSubArticles()) {
-			sub += String.format("<a href=\"%s\">%s</a> - %s<br>\n", article.getLink(), article.getTitle(),
-					article.getMedium());
-		}
-		String result = String.format("%s\n%s\n%s\n%s", title, intro, main, sub);
-		return result;
 	}
 }
