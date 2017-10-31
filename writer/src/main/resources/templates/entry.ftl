@@ -3,14 +3,15 @@
 
 <!-- intro -->
 <#if updateTime??>
+<#setting date_format="yyyy년 MM월 dd일">
 ${updateTime?date}, <#if link??><a href="${link}">${title}</a><#else>${title}</#if> 입니다.<br>
 <#else>
-현재 국제 정가에서는 "<#if link??><a href="${link}">${title}</a><#else>${title}</#if>" 관련 이슈가 화제입니다.<br>
+현재 국제 사회에서 "<#if link??><a href="${link}">${title}</a><#else>${title}</#if>" 이슈가 급부상중입니다.<br>
 </#if>
 
 <!-- main -->
 <#if mainArticle??>
-<ul>
+<ul style="padding:0px;">
 <dl style="overflow:hidden;">
 <#if mainArticle.image??>
 <dt><a href="${mainArticle.link}"><img src="${mainArticle.image}" style="position:relative; float:left; display: inline; max-width: 240px;"></a></dt>
@@ -32,7 +33,7 @@ ${updateTime?date}, <#if link??><a href="${link}">${title}</a><#else>${title}</#
 <br><br>여러 언론사들은 다음과 같은 보도로 관련 소식을 전했습니다.<br><br>
 </#if>
 
-<ul>
+<ul style="padding:0px;">
 <#list subArticles as article>
 	<li style="list-style:none;">
 		<dl style="overflow:hidden;">
