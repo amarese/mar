@@ -1,3 +1,4 @@
+<#ftl encoding='UTF-8'>
 <!-- title -->
 <h3>${title}</h3>
 

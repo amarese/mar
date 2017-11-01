@@ -32,9 +32,8 @@ public abstract class NewsCollectorBase {
 	CloseableHttpClient httpClient;
 	@Inject
 	MetaWeblogClient blogWriter;
-
 	@Inject
-	Configuration freemarkerConfig;
+	Configuration freemarkerConfiguration;
 
 	abstract String getUrl();
 
@@ -59,8 +58,8 @@ public abstract class NewsCollectorBase {
 		if (isRoutineTitle(news.getTitle())) {
 			news.setUpdateTime(new Date());
 		}
-		freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates");
-		Template t = freemarkerConfig.getTemplate("entry.ftl");
+		freemarkerConfiguration.setClassForTemplateLoading(this.getClass(), "/templates");
+		Template t = freemarkerConfiguration.getTemplate("entry.ftl");
 		String text = FreeMarkerTemplateUtils.processTemplateIntoString(t, news);
 		return text;
 	}
